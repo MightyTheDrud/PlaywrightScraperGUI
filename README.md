@@ -1,58 +1,75 @@
-Network Device Firmware Scanner Tool - Currently Designed for Routers and File Servers in this example.
+GUI JavaScript Spotter Tool
 
 Overview
-This Python script scans various subnets on a network to identify and collect information about routers and file servers, including their firmware details. The collected data is then saved into an Excel spreadsheet for easy reference using Pandas.
+This script automates interaction with web applications using Playwright, a browser automation library, to check and display rendering issues across different environments. It uses a Tkinter GUI to interact with users and display results visually.
 
-Key Features
-- Subnet Scanning: Utilizes ping3 for quick IP discovery across specified subnets.
-- Device Identification: Identifies routers and file servers by their hostnames.
+Key Features:
+- Browser Automation: Utilizes Playwright with Microsoft Edge in both headless and non-headless modes to interact with and scrape web pages.
+- GUI Interface: Provides a user-friendly Tkinter interface for selecting environments and viewing data.
+- Periodic Checks: Automatically refreshes data every 10 minutes, with options to change this frequency.
+- Data Visualization: Displays counts and allows for in-depth viewing of rendering issues through pop-up tables.
 
-Firmware Retrieval: 
-- For routers, it scrapes both the firmware version and MAC address from their respective web interfaces.
+Installation Prerequisites:
+- Python 3.x
+- Microsoft Edge (for the specified executable path), can be replaced with Chrome if preferred, both are chromium-based.
 
-- For file servers, it uses two methods:
-  + A basic HTTP request method for older or less secure systems.
-  + A more secure method involving Playwright for interaction with protected interfaces.
+Libraries Utilized:
+- tkinter
+- playwright
+- beautifulsoup4
+- pytz
 
-Multithreading: Employs concurrent execution for faster scanning with concurrent.futures.
-Data Storage: Saves all collected data into Excel spreadsheets using pandas (aliased as bamboo in the script) and openpyxl.
+Setup:
+Install Python packages in a virtual environment to avoid conflcts, in my batch script, I installed below pip packages in a virtual environment called "portaPython":
 
-Dependencies:
-time
-os
-keyboard
-requests
-socket
-concurrent.futures
-pandas (as bamboo)
-openpyxl
-playwright (for web scraping with JavaScript)
-datetime
-beautifulsoup4 (for HTML parsing)
-ping3 (for network pinging)
+pip install tkinter playwright beautifulsoup4 pytz
 
-Usage
-- Prepare Input: Ensure Subnet.txt contains entries of subnets and their corresponding locations in the format subnet | location.
+Ensure Microsoft Edge is installed at the path specified in the script or update the path accordingly.
 
-Run Script: Execute the script. It will:
-- Scan subnets for devices.
-- Retrieve firmware and device information.
-- Allow user input to decide whether to scan file servers or not.
-- Save results to both local and network-shared Excel files.
+Usage:
+Once configured properly with virtual environment "portaPython", run this script from JavascriptScraperWithGUIRun.bat
 
-Notes
-- The script uses hardcoded credentials for accessing some file servers (username = "Neo", password = "FollowTheWhiteRabbit1999"). Ensure these are secure or change them in production.
-- The script assumes Microsoft Edge for Playwright operations; ensure the path to the Edge executable is correct on the system.
-- Adjust max_workers in thread pools based on your system capabilities to balance speed and resource usage.
+Interaction:
+Menu Bar: Select from "Option One", "Option Two", or "Option Three" to choose which environment to interact with.
 
-Files Generated - if either file already exists, results are appended instead of generating a new file:
-RoutersFileServersFirmwareResults.xlsx (Local path)
-\\exampleTeamNetworkPath\\RoutersFileServersFirmwareResults\\RoutersFileServersFirmwareResults.xlsx (Shared network path)
+GUI Elements:
+- Render Image: Indicates the start of the rendering check.
+- Local Side / Remote Side: Shows counts of issues found locally or remotely.
+- Failed Render: Number of failed renderings.
+- IQ Render, Amount, Render Reject, Balance: Specific counters for different rendering queues.
 
-Security Considerations
-- Be cautious with network scanning; ensure you have permission to scan the network you're targeting.
-- The use of hardcoded credentials in the script is not recommended for production environments; consider implementing a secure way to manage credentials. For personal use, knock yourself out! =)
+Functionality:
+- Automatic Refresh: Every 10 minutes (configurable), the script will recheck and update the GUI if minimized or not.
+- Alert Popups: Notifies users if any issues are detected in each category.
+- Detailed View: Clicking on any counter opens a popup with detailed data in a table format.
 
-Exit
-The program waits for the user to press 'q' to quit, allowing time to view results before closing.
+Functions Explained:
+- dateFind(): Gets the current date formatted for US/Eastern time zone.
+- popupTables(): Generates a Tkinter popup window with tabular data.
+- Option Functions (optionOne, optionTwo, optionThree): Initialize browser sessions for different environments.
+- interactWithMainTestPage(): Handles navigation and data extraction from the web application.
+- workflowPageSpecificTable(): Extracts and formats data from specific grids on the page.
+- menuOption*(): Correlate with the options in the GUI menu, executing tasks for each environment.
+- spotterGUI Class: Manages the creation and behavior of the GUI, including periodic data refresh and user interaction.
+
+Notes:
+- Headless Mode: Options Two and Three use headless mode for Edge, which means no browser window will open during execution.
+- Security: The script uses --disable-blink-features=AutomationControlled to bypass some automation detection mechanisms.
+
+Troubleshooting:
+- If the script fails to interact with web pages, check to ensure the Edge executable is indeed correct.
+- When in doubt with playwright or just programming in general, add as many prints as possible to help debug your script and ensure you're pulling the proper elements at critical points.
+- In the batch script, comment out pythonw at the end and swap with python; pythonw hides the console, swap back to pythonw when you're finished debugging the program. =)
+- Always also ensure the webpages desired are still up and running; also ensure elements haven't changed; most likely the case if you get your program up and running, but the program fails after a period of time.
+
+
+
+
+
+
+
+
+
+
+
 
